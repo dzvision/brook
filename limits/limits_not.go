@@ -12,12 +12,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-package brook
+// +build windows
 
-import "testing"
+package limits
 
-func TestMakeSSKey(t *testing.T) {
-	key := MakeSSKey("a")
-	t.Log(len(key))
-	t.Log(key)
+func Raise() error {
+	return nil
 }

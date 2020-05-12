@@ -18,6 +18,7 @@
 
 * CLI: Add `$ brook dns`
 * CLI: Add `$ brook pac`
+* CLI: Rename `$ brook vpn` to `$ brook tun`, still experimental
 * GUI: Support multiple servers
 
 Some useful tutorial resources
@@ -55,7 +56,7 @@ Some useful tutorial resources
 
 ## What is Brook
 
-Brook is a cross-platform proxy/vpn software.<br/>
+Brook is a cross-platform strong encryption and not detectable proxy.<br/>
 Brook's goal is to keep it **simple**, **stupid** and **not detectable**.
 
 ### Install via [nami](https://github.com/txthinking/nami)

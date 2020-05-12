@@ -38,7 +38,7 @@ func main() {
 	app := cli.NewApp()
 	app.Name = "Brook"
 	app.Version = "20200502"
-	app.Usage = "A Cross-Platform Proxy/VPN Software"
+	app.Usage = "A cross-platform strong encryption and not detectable proxy"
 	app.Authors = []*cli.Author{
 		{
 			Name:  "Cloud",
@@ -396,14 +396,6 @@ func main() {
 					Aliases: []string{"l"},
 					Usage:   "Listen address, DO NOT contain IP, just like: :1080",
 				},
-				&cli.BoolFlag{
-					Name:  "letBrookDoAllForMe",
-					Usage: "See more: https://github.com/txthinking/brook/wiki/How-to-run-transparent-proxy-on-Linux%3F",
-				},
-				&cli.BoolFlag{
-					Name:  "cleanBrookDidForMe",
-					Usage: "See more: https://github.com/txthinking/brook/wiki/How-to-run-transparent-proxy-on-Linux%3F",
-				},
 				&cli.IntFlag{
 					Name:  "tcpTimeout",
 					Value: 60,
@@ -418,6 +410,14 @@ func main() {
 					Name:  "udpDeadline",
 					Value: 60,
 					Usage: "connection deadline time (s)",
+				},
+				&cli.BoolFlag{
+					Name:  "letBrookDoAllForMe",
+					Usage: "See more: https://github.com/txthinking/brook/wiki/How-to-run-transparent-proxy-on-Linux",
+				},
+				&cli.BoolFlag{
+					Name:  "cleanBrookDidForMe",
+					Usage: "See more: https://github.com/txthinking/brook/wiki/How-to-run-transparent-proxy-on-Linux",
 				},
 			},
 			Action: func(c *cli.Context) error {
@@ -487,7 +487,7 @@ func main() {
 				&cli.StringFlag{
 					Name:    "listen",
 					Aliases: []string{"l"},
-					Usage:   "Listen address, MUST contain 127.0.0.1, like: 127.0.0.1:1080",
+					Usage:   "Listen address, MUST contain IP, like: 127.0.0.1:1080",
 				},
 				&cli.StringFlag{
 					Name:  "dns",
@@ -534,6 +534,10 @@ func main() {
 					Usage: "tun mask",
 					Value: "255.255.255.0",
 				},
+				&cli.BoolFlag{
+					Name:  "letBrookDoAllForMe",
+					Usage: "See more: https://github.com/txthinking/brook/wiki/How-to-run-tun-on-Linux,-macOS-and-Windows",
+				},
 			},
 			Action: func(c *cli.Context) error {
 				if c.String("listen") == "" || c.String("server") == "" || c.String("password") == "" {
@@ -547,6 +551,7 @@ func main() {
 				if err != nil {
 					return err
 				}
+				s.LetBrookDoAllForMe = c.Bool("letBrookDoAllForMe")
 				go func() {
 					fmt.Println("Ctrl-C to quit")
 					log.Println(s.ListenAndServe())
@@ -576,6 +581,11 @@ func main() {
 					Name:  "domain",
 					Usage: "If domain is specified, the domain must have been resolved to the external IP, listen will be ignored, 80 and 443 ports will be used, TLS certificate will be automatically issued",
 				},
+				&cli.StringFlag{
+					Name:  "path",
+					Usage: "URL path",
+					Value: "/ws",
+				},
 				&cli.IntFlag{
 					Name:  "tcpTimeout",
 					Value: 60,
@@ -600,7 +610,7 @@ func main() {
 				if debug {
 					enableDebug()
 				}
-				s, err := brook.NewWSServer(c.String("listen"), c.String("password"), c.String("domain"), c.Int("tcpTimeout"), c.Int("tcpDeadline"), c.Int("udpDeadline"))
+				s, err := brook.NewWSServer(c.String("listen"), c.String("password"), c.String("domain"), c.String("path"), c.Int("tcpTimeout"), c.Int("tcpDeadline"), c.Int("udpDeadline"))
 				if err != nil {
 					return err
 				}
@@ -620,7 +630,7 @@ func main() {
 				&cli.StringFlag{
 					Name:    "wsserver",
 					Aliases: []string{"s"},
-					Usage:   "Brook wsserver address, like: ws://1.2.3.4:1080, wss://google.com:443. Do not omit the port under any circumstances",
+					Usage:   "Brook wsserver address, like: ws://1.2.3.4:80, wss://google.com:443, if no path then use /ws default or with path ws://1.2.3.4:80/ws, Do not omit the port under any circumstances",
 				},
 				&cli.StringFlag{
 					Name:    "password",
@@ -851,12 +861,12 @@ func main() {
 				&cli.StringFlag{
 					Name:    "listen",
 					Aliases: []string{"l"},
-					Usage:   "Listen address, like: 127.0.0.1:1080",
+					Usage:   "Listen address, like: 0.0.0.0:1080",
 				},
 				&cli.StringFlag{
 					Name:    "ip",
 					Aliases: []string{"i"},
-					Usage:   "IP address, like: 127.0.0.1. Why need this? Because listen address may be different from the public address your want",
+					Usage:   "IP address, like: 1.2.3.4. Why need this? Because listen address may be different from the public address your want",
 				},
 				&cli.StringFlag{
 					Name:  "username",
